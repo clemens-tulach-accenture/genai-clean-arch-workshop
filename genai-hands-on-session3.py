@@ -192,15 +192,17 @@ tools = [
     )
 ]
 
-# Initialize agent
+# Initialize agent (with handle_parsing_errors=True to retry on format issues)
 llm = ChatOpenAI(model="gpt-4.1-nano", api_key=OPENAI_API_KEY)
 agent = initialize_agent(
-    tools, llm, agent=AgentType.ZERO_SHOT_REACT_DESCRIPTION, verbose=True  # Shows reasoning
+    tools, llm, agent=AgentType.ZERO_SHOT_REACT_DESCRIPTION, 
+    verbose=True,  # Shows reasoning
+    handle_parsing_errors=True  # Key fix: Retries if LLM skips format
 )
 
-# Run agent on sample
+# Run agent on sample (tweaked prompt to encourage tool use first)
 java_code = SAMPLES["leaky_repository"]  # Experiment here
-prompt = f"Analyze this Java code for misplaced business logic violations: {java_code}"
+prompt = f"First, use the RetrieveArchitectureRules tool to get relevant rules for this Java code. Then, analyze it step-by-step for misplaced business logic violations: {java_code}"
 result = agent.run(prompt)
 print("\nAgent's Final Analysis:\n", result)
 
