@@ -1,8 +1,10 @@
+# requirements.txt
+requests==2.32.4          # Colab-Pin
+langchain==0.3.27
+langchain-community==0.3.27
+langchain-openai>=0.3.35  # kompatibel zu 0.3.x
 sentence-transformers>=3.0.0
 faiss-cpu>=1.8.0
 openai>=1.40.0
-langchain>=0.2.0
-langchain-openai>=0.1.0
-langchain-community>=0.2.0
-numpy>=1.24.0  # Implicit dep for embeddings/FAISS
-torch>=2.0.0  # Required by sentence-transformers
+numpy>=1.24.0
+torch>=2.0.0
