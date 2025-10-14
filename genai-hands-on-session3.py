@@ -22,7 +22,7 @@ from langchain.chains import LLMChain, SequentialChain
 from langchain_core.runnables import RunnableLambda
 
 # Your OpenAI API key (add once here)
-OPENAI_API_KEY = "sk-..."  # Replace with your actual key
+OPENAI_API_KEY = "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​"  # Replace with your actual key
 
 # Mini Knowledge Base (architecture rules; same across sections)
 KB_MARKDOWN = """
