@@ -8,7 +8,7 @@
 
 # Shared Setup: Installs and Data
 # (Run this first; ~2 min)
-!pip install sentence-transformers faiss-cpu openai langchain langchain-openai langchain-community
+#pip install sentence-transformers faiss-cpu openai langchain langchain-openai langchain-community
 
 import re
 import numpy as np
@@ -21,8 +21,13 @@ from langchain.prompts import PromptTemplate
 from langchain.chains import LLMChain, SequentialChain
 from langchain_core.runnables import RunnableLambda
 
-# Your OpenAI API key (add once here)
-OPENAI_API_KEY = "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​"  # Replace with your actual key
+# Read OpenAI API key from file (secure; not hardcoded)
+try:
+    with open('api-key.txt', 'r') as f:
+        OPENAI_API_KEY = f.read().strip()
+    print("API key loaded from file.")
+except FileNotFoundError:
+    raise FileNotFoundError("Upload 'api-key.txt' (containing just your OpenAI key) to Colab's file browser and re-run.")
 
 # Mini Knowledge Base (architecture rules; same across sections)
 KB_MARKDOWN = """
