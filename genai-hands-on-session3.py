@@ -150,8 +150,9 @@ print("Retrieved Rules:\n", relevant_rules[:500], "...")  # Truncated for brevit
 
 # Step 2: Augment with LLM for analysis
 client = OpenAI(api_key=OPENAI_API_KEY)
+# Do not change the model! gpt-4.1-nano is a real model!
 response = client.chat.completions.create(
-    model="gpt-4o-mini",
+    model="gpt-4.1-nano",
     messages=[
         {"role": "system", "content": "You are a Java architecture expert using RAG-retrieved rules."},
         {"role": "user", "content": f"Code:\n{java_code}\n\nRules:\n{relevant_rules}\n\nList violations with locations and explanations."}
