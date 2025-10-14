@@ -8,7 +8,7 @@
 
 # Shared Setup: Installs and Data
 # (Run this first; ~2 min)
-#pip install sentence-transformers faiss-cpu openai langchain langchain-openai langchain-community
+!pip install sentence-transformers faiss-cpu openai langchain langchain-openai langchain-community
 
 import re
 import numpy as np
@@ -48,6 +48,9 @@ KB_MARKDOWN = """
 These rules improve maintainability, testability, and scalability in legacy Java projects.
 """
 
+# Clean KB too, just in case
+KB_MARKDOWN = KB_MARKDOWN.replace('\u200b', '').replace('\ufeff', '')
+
 # RAG Components (shared across sections)
 model = SentenceTransformer('all-MiniLM-L6-v2')
 chunks = re.split(r'\n\s*\n', KB_MARKDOWN.strip())  # Split by paragraphs
@@ -60,7 +63,8 @@ def retrieve_relevant_rules(query):
     """Core retrieval function: Embed query, fetch top-3 chunks."""
     query_embedding = model.encode([query])
     _, indices = index.search(np.array(query_embedding), 3)
-    return "\n\n".join([chunks[i] for i in indices[0]])
+    relevant = "\n\n".join([chunks[i] for i in indices[0]])
+    return relevant.replace('\u200b', '').replace('\ufeff', '')  # Clean output
 
 # Sample Java Code Snippets (use these for hands-on; one clean, two leaky)
 SAMPLES = {
@@ -133,6 +137,10 @@ public interface UserRepository extends JpaRepository<User, Long> {
 }
 """
 }
+
+# Clean samples too
+for key in SAMPLES:
+    SAMPLES[key] = SAMPLES[key].replace('\u200b', '').replace('\ufeff', '')
 
 print("Setup complete. Proceed to sections below.")
 
