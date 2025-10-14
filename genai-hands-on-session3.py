@@ -193,7 +193,7 @@ tools = [
 ]
 
 # Initialize agent
-llm = ChatOpenAI(model="gpt-4o-mini", api_key=OPENAI_API_KEY)
+llm = ChatOpenAI(model="gpt-4.1-nano", api_key=OPENAI_API_KEY)
 agent = initialize_agent(
     tools, llm, agent=AgentType.ZERO_SHOT_REACT_DESCRIPTION, verbose=True  # Shows reasoning
 )
@@ -215,7 +215,7 @@ print("\nAgent's Final Analysis:\n", result)
 # Hands-on: Run, then input custom code and trace the verbose flow.
 
 # LLM setup
-llm = ChatOpenAI(model="gpt-4o-mini", api_key=OPENAI_API_KEY)
+llm = ChatOpenAI(model="gpt-4.1-nano", api_key=OPENAI_API_KEY)
 
 # Chain 1: Retrieval (wrapped as runnable)
 retrieval_runnable = RunnableLambda(lambda inputs: {"rules": retrieve_relevant_rules(inputs["code"])})
