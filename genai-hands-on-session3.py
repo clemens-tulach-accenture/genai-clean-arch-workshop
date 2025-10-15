@@ -18,8 +18,7 @@ from openai import OpenAI
 from langchain_openai import ChatOpenAI
 from langchain.agents import Tool, initialize_agent, AgentType
 from langchain.prompts import PromptTemplate
-from langchain.chains import LLMChain, SequentialChain
-from langchain_core.runnables import RunnableLambda
+from langchain.chains import LLMChain, SequentialChain, TransformChain
 
 # Read OpenAI API key from file (secure; not hardcoded)
 try:
@@ -219,8 +218,15 @@ print("\nAgent's Final Analysis:\n", result)
 # LLM setup
 llm = ChatOpenAI(model="gpt-4.1-nano", api_key=OPENAI_API_KEY)
 
-# Chain 1: Retrieval (wrapped as runnable)
-retrieval_runnable = RunnableLambda(lambda inputs: {"rules": retrieve_relevant_rules(inputs["code"])})
+# Chain 1: Retrieval (wrapped as TransformChain)
+def transform_retrieval(inputs):
+    return {"rules": retrieve_relevant_rules(inputs["code"])}
+
+retrieval_chain = TransformChain(
+    input_variables=["code"],
+    output_variables=["rules"],
+    transform=transform_retrieval
+)
 
 # Chain 2: Analysis
 analysis_prompt = PromptTemplate.from_template(
@@ -230,7 +236,7 @@ analysis_chain = LLMChain(llm=llm, prompt=analysis_prompt, output_key="analysis"
 
 # Full workflow: Sequential chain
 workflow = SequentialChain(
-    chains=[retrieval_runnable, analysis_chain],
+    chains=[retrieval_chain, analysis_chain],
     input_variables=["code"],
     output_variables=["analysis"],
     verbose=True  # Logs each step
